@@ -14,7 +14,7 @@ public class Clientes {
     private String complemento;
     private String bairro;
     private String cidade;
-    private String uf;  
+   // private String uf;  
 
     public int getId() {
         return id;
@@ -119,13 +119,14 @@ public class Clientes {
     public void setCidade(String cidade) {
         this.cidade = cidade;
     }
+    
+   // public String getUf() {
+   //     return uf;
+   // }
 
-    public String getUf() {
-        return uf;
-    }
+   // public void setUf(String uf) {
+   //     this.uf = uf;
+   // }
 
-    public void setUf(String uf) {
-        this.uf = uf;
-    }
     
 }

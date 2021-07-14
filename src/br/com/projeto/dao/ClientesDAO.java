@@ -20,7 +20,7 @@ public class ClientesDAO {
         this.connection = new ConnectionFactory().getConnection();
     }
     
-    public void cadastrarCliente(Clientes cli){        
+    public void cadastrarCliente(Clientes cli){
         try {
             String sql =
                     "INSERT INTO tb_clientes(nome,rg,cpf,email,telefone,celular,cep,endereco,numero,"
@@ -41,7 +41,7 @@ public class ClientesDAO {
             stmt.setString(10, cli.getComplemento());
             stmt.setString(11, cli.getBairro());
             stmt.setString(12, cli.getCidade());
-            stmt.setString(13, cli.getUf());
+            //stmt.setString(13, cli.getUf());
             
             stmt.execute();
             stmt.close();
@@ -53,7 +53,7 @@ public class ClientesDAO {
         }
                  
     }
-
+    
     public List<Clientes> listarClientes(){
         try {
             List<Clientes> lista = new ArrayList<>();            
@@ -77,34 +77,105 @@ public class ClientesDAO {
                 cli.setComplemento(rs.getString("complemento"));
                 cli.setBairro(rs.getString("bairro"));
                 cli.setCidade(rs.getString("cidade"));
-                cli.setUf(rs.getString("estado"));
+                //cli.setUf(rs.getString("estado"));
                 
                 lista.add(cli);
             }
-            return lista;                  
+            return lista;         
             
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro: "+ ex);
             return null;
-        }        
+        }
+    }
+    
+    public List<Clientes> consultaPorNome(String nome){
+        try {
+            List<Clientes> lista = new ArrayList<>();            
+            String sql = "SELECT * FROM tb_clientes WHERE nome like ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, nome);
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                Clientes cli = new Clientes();
+                
+                cli.setId(rs.getInt("id"));
+                cli.setNome(rs.getString("nome"));
+                cli.setRg(rs.getString("rg"));
+                cli.setCpf(rs.getString("cpf"));
+                cli.setEmail(rs.getString("email"));
+                cli.setTelefone(rs.getString("telefone"));
+                cli.setCelular(rs.getString("celular"));
+                cli.setCep(rs.getString("cep"));
+                cli.setEndereco(rs.getString("endereco"));
+                cli.setNumero(rs.getInt("numero"));
+                cli.setComplemento(rs.getString("complemento"));
+                cli.setBairro(rs.getString("bairro"));
+                cli.setCidade(rs.getString("cidade"));
+                //cli.setUf(rs.getString("estado"));
+                
+                lista.add(cli);
+            }
+            return lista;         
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro: "+ ex);
+            return null;
+        }
+    }
+    
+    public Clientes buscaPorNome(String nome){
+        try {
+            String sql = "SELECT * FROM tb_clientes WHERE nome = ?";
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, nome);
+            
+            ResultSet rs = stmt.executeQuery();
+            
+            Clientes cli = new Clientes();
+            
+            if(rs.next()){                
+                cli.setId(rs.getInt("id"));
+                cli.setNome(rs.getString("nome"));
+                cli.setRg(rs.getString("rg"));
+                cli.setCpf(rs.getString("cpf"));
+                cli.setEmail(rs.getString("email"));
+                cli.setTelefone(rs.getString("telefone"));
+                cli.setCelular(rs.getString("celular"));
+                cli.setCep(rs.getString("cep"));
+                cli.setEndereco(rs.getString("endereco"));
+                cli.setNumero(rs.getInt("numero"));
+                cli.setComplemento(rs.getString("complemento"));
+                cli.setBairro(rs.getString("bairro"));
+                cli.setCidade(rs.getString("cidade"));
+                //cli.setUf(rs.getString("estado"));                
+            }
+            return cli;      
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Cliente não encontrado!");
+            return null;
+        }
     }
     
     public void excluirCliente(Clientes cli){
-        try{
-            
-            String sql = "SELECT FROM tb_clientes WHERE id = ?";
+          try {
+                       
+            String sql = "DELETE FROM tb_clientes WHERE id = ?";
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setInt(1,cli.getId());
             
             stmt.execute();
             stmt.close();
             
-            JOptionPane.showMessageDialog(null,"Excluido com sucesso! ! !");
+            JOptionPane.showMessageDialog(null, "Excluido com sucesso!!!");
+                                 
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro: "+ ex);
-            
-        } 
+            JOptionPane.showMessageDialog(null, "Erro: "+ ex);           
+        }
+        
     }
     
     public void alterarCliente(Clientes cli){
@@ -128,7 +199,7 @@ public class ClientesDAO {
             stmt.setString(10, cli.getComplemento());
             stmt.setString(11, cli.getBairro());
             stmt.setString(12, cli.getCidade());
-            stmt.setString(13, cli.getUf());
+            //stmt.setString(13, cli.getUf());
             
             stmt.setInt(14, cli.getId());
             
@@ -143,3 +214,4 @@ public class ClientesDAO {
         }
     }
 }
+
